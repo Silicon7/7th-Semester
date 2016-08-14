@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/socket.h>
+#include<unistd.h>
+#include <netinet/in.h>
+#include <string.h>
+#include <arpa/inet.h>
+
+int PORT = 12345;
+char buffer[15];
+int bufLen;
+char rBuffer[15];
+int rBufLen = 256;
+
+int main()
+{
+	int sock,sockLen;
+	struct sockaddr_in client,server;
+
+	server.sin_family = AF_INET;
+	server.sin_port = htons(PORT);
+	server.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+	sockLen = sizeof(struct sockaddr_in);	
+	
+	sock = socket(AF_INET,SOCK_STREAM,0);
+	
+	
+	if(connect(sock,(struct sockaddr*)&server,sockLen)<0)
+		printf("\n*****connect_function_failed*****\n");
+
+
+	if(recv(sock,rBuffer,rBufLen,0)<0)
+		printf("------FAILED_RECIEVING-----\n");
+	printf("SERVER : %s \n",rBuffer);
+	
+	
+	printf("CLIENT : ");	gets(buffer);
+	if(send(sock,buffer,256,0)<0)
+		printf("======FAILED_SENDING=====\n");
+
+	if(recv(sock,rBuffer,rBufLen,0)<0)
+		printf("------FAILED_RECIEVING-----\n");
+	printf("SERVER : %s \n",rBuffer);
+	
+
+	printf("CLIENT : ");	scanf("%s",&*buffer);
+	if(send(sock,buffer,256,0)<0)
+		printf("======FAILED_SENDING=====\n");
+	
+
+
+close(sock);
+}

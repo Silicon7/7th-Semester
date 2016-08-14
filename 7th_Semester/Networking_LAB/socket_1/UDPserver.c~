@@ -1,0 +1,37 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/socket.h>
+#include<unistd.h>
+#include <netinet/in.h>
+
+char message[5] = {'H','E','L','L','O'};
+
+int main()
+{
+	int sb,flag,sock;
+
+	struct sockaddr_in  my_addr,to;
+
+	my_addr.sin_family = AF_INET;
+	my_addr.sin_port = htons(12000);
+	my_addr.sin_addr.s_addr = INADDR_ANY;
+
+	
+
+
+	sock = socket(AF_INET,SOCK_DGRAM,0);
+	if(sock == -1)
+	{
+		printf("\n***** SOCKET NOT CREATED ****");
+	}
+	
+	 if (bind(sock, (struct sockaddr *)&my_addr, sizeof(my_addr))<0) 
+    	{
+        perror("bind failed");
+        exit(EXIT_FAILURE);
+    	}
+	
+	sb = sendto(sock, (void *)message, 5 , flag, (struct sockaddr *)&to,sizeof(to));
+
+	return 0;
+}

@@ -1,0 +1,27 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<sys/socket.h>
+#include<unistd.h>
+
+char message[5] = {'H','E','L','L','O'};
+char empty [];
+int main()
+{
+	int sb,flag;
+	struct sockaddr  my_addr,to;
+	
+
+	int sock = socket(AF_INET,SOCK_DGRAM,0);
+	if(sock == -1)
+	{
+		printf("\n***** SOCKET NOT CREATED ****");
+	}
+	 my_addr.sa_data[14] = {1,9,2,1,6,8,1,0,1,1,1,2,3,4};
+	 to.sa_data[14] = {1,9,2,1,6,8,1,0,1,1,1,2,3,4};
+	
+	int bind(sock,(struct sockaddr *)&my_addr,14);
+	 
+	sb = recvfrom(sock, (void *)empty, 5 , flag, (struct sockaddr *)&to,14);
+
+	return 0;
+}
